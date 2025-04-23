@@ -6,8 +6,6 @@ use App\Entity\Book;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Category;
@@ -24,6 +22,7 @@ class BookType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'trim' => true,
+                'attr' => ['rows' => 5],
             ])
             ->add('isbn')
             ->add('category', EntityType::class, [
@@ -32,17 +31,6 @@ class BookType extends AbstractType
                 'required' => false,
             ])
         ;
-
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-            $data = $event->getData();
-
-            if (isset($data['description'])) {
-                $data['description'] = substr($data['description'], 0, 80);
-            }
-
-            // Update the event with the modified data
-            $event->setData($data);
-        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
