@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Book;
+use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Faker\Factory;
 use Doctrine\Persistence\ObjectManager;
@@ -12,6 +13,14 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
+
+        $categories = ['Fiction', 'Science', 'History'];
+        foreach ($categories as $title) {
+            $category = new Category();
+            $category->setTitle($title);
+            $manager->persist($category);
+            $categories[] = $category;
+        }
 
         for ($i = 0; $i < 100; $i++) {
             $description = $faker->paragraph;
